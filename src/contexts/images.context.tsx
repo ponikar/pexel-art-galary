@@ -1,8 +1,10 @@
 import React, {
   createContext,
   FC,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { ImageAPIResponseType, ImageType } from "../@types/image";
@@ -49,25 +51,28 @@ export const ImageContextProvider: FC = ({ children }) => {
     }
   }, [data]);
 
-  const onSetCurrentPage = () => {
+  const onSetCurrentPage = useCallback(() => {
     // if (!isLoading) {
     setCurrentPage((page) => page + 1);
     //   console.log("FETCHING");
     // }
-  };
+  }, [setCurrentPage]);
+
+  const contextValues = useMemo(
+    () => ({
+      cols,
+      isLoading,
+      error,
+      metaInformation: {
+        currentPage,
+        nextPage: onSetCurrentPage,
+      },
+    }),
+    [cols, isLoading, error, currentPage, onSetCurrentPage]
+  );
 
   return (
-    <ImageContext.Provider
-      value={{
-        cols,
-        isLoading,
-        error,
-        metaInformation: {
-          currentPage,
-          nextPage: onSetCurrentPage,
-        },
-      }}
-    >
+    <ImageContext.Provider value={{ ...contextValues }}>
       {children}
     </ImageContext.Provider>
   );

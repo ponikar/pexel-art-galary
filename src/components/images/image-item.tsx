@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import { ImageType } from "../../@types/image";
 
 interface ImageItemTypes extends ImageType {}
 
-export const ImageItem: FC<ImageItemTypes> = ({ src, avg_color, id }) => {
+export const ImageItem: FC<ImageItemTypes> = memo(({ src, avg_color, id }) => {
   return (
     <img
       key={id}
@@ -18,4 +18,4 @@ export const ImageItem: FC<ImageItemTypes> = ({ src, avg_color, id }) => {
       } w-full sm:mb-5 mb-1 object-cover lazy-loading animate-pulse`}
     />
   );
-};
+});

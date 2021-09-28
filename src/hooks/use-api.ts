@@ -19,7 +19,7 @@ export function usePaginateApi<ResponseType = unknown>({
     [requestId, page],
     async () => {
       return await (
-        await fetch(`${url}?page=${page}&query=laptops&per_page=18`, options)
+        await fetch(`${url}?page=${page}&query=night&per_page=18`, options)
       ).json();
     },
     {
