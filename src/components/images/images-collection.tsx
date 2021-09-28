@@ -1,11 +1,33 @@
-import React, { FC } from "react";
-import { ImageType } from "../../@types/image";
+import React, { FC, useEffect } from "react";
 import { useImages } from "../../contexts/images.context";
+import { useObserver } from "../../hooks/use-obeserver";
 import { ImageItem } from "./image-item";
 
 interface ImageCollectionTypes {}
 export const ImageCollections: FC<ImageCollectionTypes> = () => {
   const { cols } = useImages();
+
+  const observer = useObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement;
+        img.src = entry.target.getAttribute("datasrc") as string;
+        observer.current?.unobserve(img);
+        img.onload = (e) => {
+          img.classList.remove(
+            ...["placeholder-image-h", "placeholder-image-v", "animate-pulse"]
+          );
+        };
+      }
+    });
+  });
+
+  useEffect(() => {
+    document.querySelectorAll(".lazy-loading").forEach((ele) => {
+      observer.current.observe(ele);
+      ele.classList.remove("lazy-loading");
+    });
+  }, [cols, observer.current]);
   return (
     <>
       {cols.map((col, index) => (

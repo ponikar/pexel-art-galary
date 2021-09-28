@@ -5,14 +5,25 @@ interface useApiType {
   options?: RequestInit;
 
   requestId: string;
+
+  page: number;
 }
 
-export function useApi<ResponseType = unknown>({
+export function usePaginateApi<ResponseType = unknown>({
   url,
   options = {},
   requestId,
+  page,
 }: useApiType) {
-  return useQuery<unknown, unknown, ResponseType>(requestId, async () => {
-    return await (await fetch(url, options)).json();
-  });
+  return useQuery<unknown, unknown, ResponseType>(
+    [requestId, page],
+    async () => {
+      return await (
+        await fetch(`${url}?page=${page}&query=laptops&per_page=18`, options)
+      ).json();
+    },
+    {
+      refetchOnWindowFocus: false, // we don't need to fetch data on refocus
+    }
+  );
 }

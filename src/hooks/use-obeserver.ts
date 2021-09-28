@@ -1,35 +1,16 @@
 import { useEffect, useRef } from "react";
 import { ImageType } from "../@types/image";
 
-export const useObserver = (cols: ImageType[][]) => {
+type CallbackType = (entries: IntersectionObserverEntry[]) => void;
+export const useObserver = (callback: CallbackType) => {
   // using any for tempory
-  const intersectionObserver = useRef<null | IntersectionObserver>(null);
-
+  const intersectionObserver = useRef<IntersectionObserver>(
+    new IntersectionObserver((entries) => callback(entries))
+  );
   useEffect(() => {
-    intersectionObserver.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
-          img.src = entry.target.getAttribute("datasrc") as string;
-          intersectionObserver.current?.unobserve(img);
-          img.onload = (e) => {
-            img.classList.remove(
-              ...["placeholder-image-h", "placeholder-image-v", "animate-pulse"]
-            );
-          };
-        }
-      });
-    });
+    () => {
+      intersectionObserver.current.disconnect();
+    };
   }, []);
-
-  useEffect(() => {
-    if (intersectionObserver.current) {
-      document.querySelectorAll(".lazy-loading").forEach((ele) => {
-        intersectionObserver.current?.observe(ele);
-        ele.classList.remove("lazy-loading");
-      });
-    }
-  }, [cols, intersectionObserver.current]);
-
   return intersectionObserver;
 };

@@ -15,7 +15,7 @@ export const ImageItem: FC<ImageItemTypes> = ({ src, avg_color, id }) => {
         Math.floor(Math.random() * 2) == 0
           ? "placeholder-image-v"
           : "placeholder-image-h"
-      } w-full sm:mb-5 mb-2 object-cover lazy-loading animate-pulse`}
+      } w-full sm:mb-5 mb-1 object-cover lazy-loading animate-pulse`}
     />
   );
 };

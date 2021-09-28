@@ -1,33 +1,43 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { ImageAPIResponseType, ImageType } from "../@types/image";
-import { useApi } from "../hooks/use-api";
-import { useObserver } from "../hooks/use-obeserver";
+import { usePaginateApi } from "../hooks/use-api";
 
 interface ImageContextType {
   cols: ImageType[][];
   isLoading: boolean;
+
   error: string | unknown;
-  metaInformation: ImageAPIResponseType | undefined;
+
+  metaInformation: {
+    currentPage: number;
+    nextPage: () => void;
+  };
 }
 
 const ImageContext = createContext<ImageContextType | null>(null);
 
 export const ImageContextProvider: FC = ({ children }) => {
   const [cols, setCols] = useState<ImageType[][]>([[], [], []]);
-  const [imageMetaInfo, setImageMetaInfo] = useState<ImageAPIResponseType>();
-  useObserver(cols);
-  const { data, isLoading, error } = useApi<ImageAPIResponseType>({
-    url: "https://api.pexels.com/v1/search?query=laptops&per_page=40",
-    requestId: "imagesCollections",
-    options: {
-      headers: {
-        Authorization: import.meta.env.VITE_PEXEL_API_KEY,
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, error, isFetching } =
+    usePaginateApi<ImageAPIResponseType>({
+      url: "https://api.pexels.com/v1/search",
+      requestId: "imagesCollections",
+      options: {
+        headers: {
+          Authorization: import.meta.env.VITE_PEXEL_API_KEY,
+        },
       },
-    },
-  });
+      page: currentPage,
+    });
   useEffect(() => {
     if (data) {
-      setImageMetaInfo(data);
       const { photos } = data;
       const newArr = cols;
       let counter = 0;
@@ -39,11 +49,24 @@ export const ImageContextProvider: FC = ({ children }) => {
     }
   }, [data]);
 
-  console.log(data);
+  const onSetCurrentPage = () => {
+    // if (!isLoading) {
+    setCurrentPage((page) => page + 1);
+    //   console.log("FETCHING");
+    // }
+  };
 
   return (
     <ImageContext.Provider
-      value={{ cols, isLoading, error, metaInformation: imageMetaInfo }}
+      value={{
+        cols,
+        isLoading,
+        error,
+        metaInformation: {
+          currentPage,
+          nextPage: onSetCurrentPage,
+        },
+      }}
     >
       {children}
     </ImageContext.Provider>
