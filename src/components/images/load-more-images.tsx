@@ -6,15 +6,11 @@ import { PlaceholderImages } from "../placeholder-images/placeholder-images-coll
 export const LoadMoreImages = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [isWatching, setIsWatching] = useState(false);
-  const {
-    cols,
-    metaInformation: { nextPage },
-    isLoading,
-  } = useImages();
+  const { cols, nextPage } = useImages();
   const observer = useObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        // nextPage();
+        nextPage();
         console.log(entry.intersectionRatio);
       }
     });

@@ -1,25 +1,22 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 interface useApiType {
   url: string;
   options?: RequestInit;
 
   requestId: string;
-
-  page: number;
 }
 
 export function usePaginateApi<ResponseType = unknown>({
   url,
   options = {},
   requestId,
-  page,
 }: useApiType) {
-  return useQuery<unknown, unknown, ResponseType>(
-    [requestId, page],
-    async () => {
+  return useInfiniteQuery<unknown, unknown, ResponseType>(
+    requestId,
+    async ({ pageParam = 1 }) => {
       return await (
-        await fetch(`${url}?page=${page}&query=night&per_page=18`, options)
+        await fetch(`${url}?page=${pageParam}&query=night&per_page=18`, options)
       ).json();
     },
     {
