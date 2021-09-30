@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { useImages } from "../../contexts/images.context";
 import { useObserver } from "../../hooks/use-obeserver";
+import { LoadingMoreProvider } from "../loading-more/loading-more";
 import { ImageItem } from "./image-item";
 import { LoadMoreImages } from "./load-more-images";
 
@@ -30,7 +31,7 @@ export const ImageCollections: FC<ImageCollectionTypes> = () => {
     });
   }, [cols, observer.current]);
   return (
-    <>
+    <LoadingMoreProvider>
       {cols.map((col, index) => (
         <div className="flex flex-col" key={index}>
           {col.map((c) => (
@@ -39,6 +40,6 @@ export const ImageCollections: FC<ImageCollectionTypes> = () => {
           <LoadMoreImages />
         </div>
       ))}
-    </>
+    </LoadingMoreProvider>
   );
 };

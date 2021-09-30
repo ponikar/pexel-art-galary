@@ -1,31 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useImages } from "../../contexts/images.context";
-import { useObserver } from "../../hooks/use-obeserver";
+import { memo } from "react";
+import { useLoadingMore } from "../loading-more/loading-more";
 import { PlaceholderImages } from "../placeholder-images/placeholder-images-collection";
 
-export const LoadMoreImages = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isWatching, setIsWatching] = useState(false);
-  const { cols, nextPage } = useImages();
-  const observer = useObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        nextPage();
-        console.log(entry.intersectionRatio);
-      }
-    });
-  });
-
-  useEffect(() => {
-    if (!isWatching && cols[0].length) {
-      ref.current && observer.current.observe(ref.current);
-      setIsWatching(true);
-    }
-  }, [cols, isWatching]);
+export const LoadMoreImages = memo(() => {
+  const { loadingRefs, observer } = useLoadingMore();
 
   return (
-    <section ref={ref} className="w-full">
+    <section
+      ref={(ref) => {
+        if (ref) {
+          loadingRefs.push(ref);
+          observer.current.observe(ref);
+        }
+      }}
+      className="w-full"
+    >
       <PlaceholderImages length={3} />
     </section>
   );
-};
+});
