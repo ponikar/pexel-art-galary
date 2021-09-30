@@ -1,5 +1,6 @@
 import React, { FC, memo } from "react";
 import { ImageType } from "../../@types/image";
+import { getPlaceholderImageStyle } from "../../utils/common.utils";
 
 interface ImageItemTypes extends ImageType {}
 
@@ -11,11 +12,7 @@ export const ImageItem: FC<ImageItemTypes> = memo(({ src, avg_color, id }) => {
       datasrc={src.large}
       loading="lazy"
       style={{ backgroundColor: avg_color }}
-      className={`${
-        Math.floor(Math.random() * 2) == 0
-          ? "placeholder-image-v"
-          : "placeholder-image-h"
-      } w-full sm:mb-5 mb-1 object-cover lazy-loading animate-pulse`}
+      className={`${getPlaceholderImageStyle()} w-full sm:mb-5 mb-1 object-cover lazy-loading animate-pulse`}
     />
   );
 });

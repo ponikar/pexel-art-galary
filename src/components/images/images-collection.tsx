@@ -2,6 +2,7 @@ import React, { FC, useEffect } from "react";
 import { useImages } from "../../contexts/images.context";
 import { useObserver } from "../../hooks/use-obeserver";
 import { ImageItem } from "./image-item";
+import { LoadMoreImages } from "./load-more-images";
 
 interface ImageCollectionTypes {}
 export const ImageCollections: FC<ImageCollectionTypes> = () => {
@@ -35,6 +36,7 @@ export const ImageCollections: FC<ImageCollectionTypes> = () => {
           {col.map((c) => (
             <ImageItem key={c.id} {...c} />
           ))}
+          <LoadMoreImages />
         </div>
       ))}
     </>

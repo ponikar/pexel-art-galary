@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .placeholder-image-v {
-  height: 300px;
+  @apply sm:h-96 h-36;
   width: 100%;
 }
 
 .placeholder-image-h {
-  height: 250px;
+  @apply sm:h-64 h-24;
   width: 100%;
 }

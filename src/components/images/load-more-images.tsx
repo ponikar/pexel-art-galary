@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useImages } from "../../contexts/images.context";
 import { useObserver } from "../../hooks/use-obeserver";
+import { PlaceholderImages } from "../placeholder-images/placeholder-images-collection";
 
 export const LoadMoreImages = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -8,12 +9,13 @@ export const LoadMoreImages = () => {
   const {
     cols,
     metaInformation: { nextPage },
+    isLoading,
   } = useImages();
   const observer = useObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        nextPage();
-        console.log(entry.target.innerHTML);
+        // nextPage();
+        console.log(entry.intersectionRatio);
       }
     });
   });
@@ -24,9 +26,10 @@ export const LoadMoreImages = () => {
       setIsWatching(true);
     }
   }, [cols, isWatching]);
+
   return (
-    <section ref={ref} className="p-4">
-      I will load more data!
+    <section ref={ref} className="w-full">
+      <PlaceholderImages length={3} />
     </section>
   );
 };
