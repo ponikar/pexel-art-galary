@@ -17,13 +17,15 @@ interface ImageContextType {
 
   error: string | unknown;
 
+  isFetchingNextPage: boolean;
+
   nextPage: () => void;
 }
 
 const ImageContext = createContext<ImageContextType | null>(null);
 
 export const ImageContextProvider: FC = ({ children }) => {
-  const [cols, setCols] = useState<ImageType[][]>([[], [], []]);
+  const [cols, setCols] = useState<ImageContextType["cols"]>([[], [], []]);
   const currentPage = useRef(1);
   const { data, isLoading, error, isFetchingNextPage, fetchNextPage } =
     usePaginateApi<ImageAPIResponseType>({
@@ -49,19 +51,16 @@ export const ImageContextProvider: FC = ({ children }) => {
 
       const newArr = cols;
       let counter = 0;
-      if (currentPage.current <= pages.length) {
-        while (pages[currentPage.current - 1].photos.length) {
-          newArr[counter].push(
-            ...pages[currentPage.current - 1].photos.splice(0, 3)
-          );
-          counter = counter == 2 ? 0 : counter + 1;
-        }
-        setCols([...newArr]);
-      } else {
-        currentPage.current = pages.length;
+      const paginate = pages[pages.length - 1];
+      while (paginate.photos.length) {
+        newArr[counter].push(...paginate.photos.splice(0, 3));
+        counter = counter == 2 ? 0 : counter + 1;
       }
+      setCols([...newArr]);
     }
   }, [data]);
+
+  console.log(cols[0].length + cols[1].length + cols[2].length);
 
   const contextValues = useMemo(
     () => ({
@@ -69,8 +68,9 @@ export const ImageContextProvider: FC = ({ children }) => {
       isLoading,
       error,
       nextPage,
+      isFetchingNextPage,
     }),
-    [cols, isLoading, error, nextPage]
+    [cols, isLoading, error, nextPage, isFetchingNextPage]
   );
 
   return (

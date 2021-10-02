@@ -16,26 +16,18 @@ export const ImageCollections: FC<ImageCollectionTypes> = () => {
         img.src = entry.target.getAttribute("datasrc") as string;
         observer.current?.unobserve(img);
         img.onload = (e) => {
-          img.classList.remove(
-            ...["placeholder-image-h", "placeholder-image-v", "animate-pulse"]
-          );
+          img.classList.remove("animate-pulse");
         };
       }
     });
   });
 
-  useEffect(() => {
-    document.querySelectorAll(".lazy-loading").forEach((ele) => {
-      observer.current.observe(ele);
-      ele.classList.remove("lazy-loading");
-    });
-  }, [cols, observer.current]);
   return (
     <LoadingMoreProvider>
       {cols.map((col, index) => (
         <div className="flex flex-col" key={index}>
           {col.map((c) => (
-            <ImageItem key={c.id} {...c} />
+            <ImageItem observer={observer.current} key={c.id} {...c} />
           ))}
           <LoadMoreImages />
         </div>

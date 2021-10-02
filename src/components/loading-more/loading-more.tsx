@@ -5,12 +5,12 @@ import React, {
   useContext,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { useImages } from "../../contexts/images.context";
 import { useObserver } from "../../hooks/use-obeserver";
 
 interface LoadingMoreContextType {
-  loadingRefs: HTMLElement[];
   observer: MutableRefObject<IntersectionObserver>;
 }
 
@@ -19,31 +19,22 @@ const LoadingMoreContext = createContext<LoadingMoreContextType | undefined>(
 );
 
 export const LoadingMoreProvider: FC = ({ children }) => {
-  const loadingRefs = useRef<HTMLElement[]>([]);
-  const { nextPage } = useImages();
+  const { nextPage, isFetchingNextPage } = useImages();
   const timer = useRef<number>(0);
   const observer = useObserver((entries) => {
     entries.forEach((entry) => {
-      // if one of the element is
-      // intresecting with screen
-      if (entry.isIntersecting) {
-        clearInterval(timer.current);
+      clearInterval(timer.current);
+      if (entry.isIntersecting && !isFetchingNextPage) {
         timer.current = setTimeout(() => {
           console.log("I AM SUPPOSED TO CALL ONCE ONLY");
-        }, 1000);
+          nextPage();
+        }, 800);
       }
     });
   });
 
-  const stopObserving = () => {
-    if (loadingRefs.current) {
-      loadingRefs.current.forEach((ref) => observer.current.unobserve(ref));
-    }
-  };
   return (
-    <LoadingMoreContext.Provider
-      value={{ loadingRefs: loadingRefs.current, observer }}
-    >
+    <LoadingMoreContext.Provider value={{ observer }}>
       {children}
     </LoadingMoreContext.Provider>
   );
