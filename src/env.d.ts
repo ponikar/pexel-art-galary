@@ -1,4 +1,4 @@
-interface ImportMetaEnv extends Readonly<Record<string, string>> {
+interface ImportMetaEnv {
   // more env variables...
   readonly VITE_PEXEL_API_KEY: string;
 }
