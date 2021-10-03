@@ -11,6 +11,7 @@ export const Search: FC<InputHTMLAttributes<HTMLInputElement>> = ({
       <input
         {...rest}
         type="text"
+        style={{ fontSize: "18px" }}
         placeholder="Search for free Photos"
         className={`text-black flex-grow text-lg placeholder-gray-500 font-light `}
       />

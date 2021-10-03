@@ -1,8 +1,6 @@
-import React from "react";
-
 export const Logo = () => {
   return (
-    <>
+    <header className="lg:py-0 py-3 flex items-center">
       <img
         src="/imgs/logo.svg"
         alt="Pexels.com Logo Clone!"
@@ -11,6 +9,6 @@ export const Logo = () => {
       <h1 className="text-lg sm:block hidden font-medium ml-4 text-white">
         Pexels
       </h1>
-    </>
+    </header>
   );
 };

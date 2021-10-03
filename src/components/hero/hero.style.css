@@ -4,5 +4,5 @@
 
 .hero-container {
   @apply sm:py-40 py-24;
-  background-image: url("/public/imgs/hero-background.jpeg");
+  background-image: url("/imgs/hero-background.jpeg");
 }

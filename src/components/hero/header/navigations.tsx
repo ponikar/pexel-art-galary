@@ -3,7 +3,7 @@ import { NavigationLink } from "./navigation-link";
 
 export const Navigations = () => {
   return (
-    <ul className="lg:flex hidden items-center flex-grow justify-end">
+    <ul className="lg:flex py-4 hidden items-center flex-grow justify-end">
       <NavigationLink> Explore</NavigationLink>
       <NavigationLink> License</NavigationLink>
       <NavigationLink>
