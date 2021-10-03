@@ -1,0 +1,8 @@
+.lg-screen {
+  height: "60vh";
+}
+
+.hero-container {
+  @apply sm:py-40 py-24;
+  background-image: url("/imgs/hero-background.jpeg");
+}
