@@ -7,11 +7,10 @@ import { Navigations } from "./navigations";
 
 export const Header = () => {
   const [reachedTop, setReachedTop] = useState(true);
-  const observer = useObserver((entries) => {
-    entries.forEach((entry) => {
-      setReachedTop(entry.isIntersecting);
-    });
-  });
+  const observer = useObserver((entry) => {
+    setReachedTop(entry.isIntersecting);
+    console.log("I AM SCROLLING");
+  }, 250);
 
   return (
     <>
@@ -20,7 +19,7 @@ export const Header = () => {
         className="p-10 absolute"
       />
       <nav
-        className={`px-4 fixed w-full items-center flex ${
+        className={`px-4 fixed z-20 w-full items-center flex ${
           !reachedTop && "bg-header-background"
         }`}
       >
