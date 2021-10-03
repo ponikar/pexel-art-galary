@@ -20,18 +20,12 @@ const LoadingMoreContext = createContext<LoadingMoreContextType | undefined>(
 
 export const LoadingMoreProvider: FC = ({ children }) => {
   const { nextPage, isFetchingNextPage } = useImages();
-  const timer = useRef<number>(0);
-  const observer = useObserver((entries) => {
-    entries.forEach((entry) => {
-      clearInterval(timer.current);
-      if (entry.isIntersecting && !isFetchingNextPage) {
-        timer.current = setTimeout(() => {
-          console.log("I AM SUPPOSED TO CALL ONCE ONLY");
-          nextPage();
-        }, 800);
-      }
-    });
-  });
+  const observer = useObserver((entry) => {
+    if (entry.isIntersecting && !isFetchingNextPage) {
+      console.log("I AM SUPPOSED TO CALL ONCE ONLY");
+      nextPage();
+    }
+  }, 800);
 
   return (
     <LoadingMoreContext.Provider value={{ observer }}>

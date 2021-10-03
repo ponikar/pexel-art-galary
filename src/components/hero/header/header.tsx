@@ -7,11 +7,10 @@ import { Navigations } from "./navigations";
 
 export const Header = () => {
   const [reachedTop, setReachedTop] = useState(true);
-  const observer = useObserver((entries) => {
-    entries.forEach((entry) => {
-      setReachedTop(entry.isIntersecting);
-    });
-  });
+  const observer = useObserver((entry) => {
+    setReachedTop(entry.isIntersecting);
+    console.log("I AM SCROLLING");
+  }, 250);
 
   return (
     <>
